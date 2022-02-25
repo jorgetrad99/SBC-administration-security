@@ -30,7 +30,7 @@ const EncryptingForm = () => {
 
     return (
         <Fragment>
-            <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <TextField id="outlined-basic" value={message} 
                 onChange={(event) => {
                     setMessage(event.target.value);
@@ -49,7 +49,7 @@ const EncryptingForm = () => {
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={selection}
+                        value={selection + ''}
                         label="Cipher Technique"
                         onChange={handleChange}
                         sx={{ maxWidth: '16rem' }}

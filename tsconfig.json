@@ -23,7 +23,7 @@
       "next-env.d.ts",
       "**/*.ts",
       "**/*.tsx"
-  , "context/ActionsContext.jsx", "components/EncryptingResult/index.tsx", "components/EncryptingForm/index.tsx"  ],
+  , "context/ActionsContext.jsx", "components/EncryptingResult/index.tsx", "components/EncryptingForm/index.tsx", "pages/encryption-techniques.tsx", "pages/home.tsx"  ],
     "exclude": [
       "node_modules"
     ]
