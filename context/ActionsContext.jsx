@@ -8,6 +8,7 @@ export const ActionsProvider = ({ children }) => {
   const [ request, setRequest ] = useState("");
   const [ key, setKey ] = useState("");
   const [ result, setResult ] = useState("");
+  const [ depth, setDepth ] = useState("");
 
   return (
     <ActionsContext.Provider
@@ -15,7 +16,8 @@ export const ActionsProvider = ({ children }) => {
         actionFlag, setActionFlag,
         request, setRequest,
         result, setResult,
-        key, setKey
+        key, setKey,
+        depth, setDepth
       }}>
       {children}
     </ActionsContext.Provider>
