@@ -1,32 +1,81 @@
 import { useContext, Fragment, useState, useEffect } from 'react';
 
 import { Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, TextField, Button,  } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 import { ActionsContext } from '../../context/ActionsContext';
-import { display, width } from '@mui/system';
+import { callApi } from '../../utils/helpers/callApi';
+
+
+
+const api_vigenere = `https://cypher-techniques-api.herokuapp.com/vigenere`;
+const api_rial_fence = `https://cypher-techniques-api.herokuapp.com/railfence`;
 
 const EncryptingForm = () => {
     const { 
         actionFlag, setActionFlag, 
-        request, setRequest,
-        result, setResult,
-        key, setKey,
-        depth, setDepth
+        message, setMessage,
+        generatedKey, setGeneratedKey,
+        keyword, setKeyword,
+        depth, setDepth,
+        encryptedMessage, setEncryptedMessage,
+        decryptedMessage, setDecryptedMessage,
     } = useContext(ActionsContext);
 
-    const [ selection, setSelection ] = useState(0);
-    const [ message, setMessage ] = useState('');
-    const [ keyForm, setKeyForm ] = useState('');
+    const [ callingApiFlag, setCallingApiFlag ] = useState(false);
 
     const handleChange = (event: SelectChangeEvent) => {
-        setSelection(Number(event.target.value));
+        setActionFlag(Number(event.target.value));
     };
 
+    const clearFields = () => {
+        setActionFlag(0);
+        setKeyword('');
+        setGeneratedKey('');
+        setMessage('');
+        setDepth(1);
+        setEncryptedMessage('');
+        setDecryptedMessage('');
+    }
+
     useEffect(() => {
-        if(selection != 2) {
-            setKeyForm('');
+        /* if(actionFlag != 2) {
+            setkey('');
+        } */
+        if(callingApiFlag){
+            console.log('Entré');
+            console.log(message);
+            console.log(keyword);
+            console.log(depth);
+            if(actionFlag == 1){
+                callApi(`${api_rial_fence}/${message}&${depth}`)
+                    .then((data) => {
+                        console.log(data);
+                        setEncryptedMessage(data.encryptedMessage);
+                        setDecryptedMessage(data.decryptedMessage);
+                        setCallingApiFlag(false)
+                    })
+            }
+            if(actionFlag == 2){
+                callApi(`${api_vigenere}/${message}&${keyword}`)
+                    .then((data) => {
+                        console.log(data);
+                        setEncryptedMessage(data.encryptedMessage);
+                        setDecryptedMessage(data.decryptedMessage);
+                        setGeneratedKey(data.generatedKey);
+                        setCallingApiFlag(false)
+                    })
+            }
+        } 
+    }, [ callingApiFlag ]);
+
+    useEffect(() => {
+        if(!callingApiFlag) {
+            setEncryptedMessage('');
+            setDecryptedMessage('');
+            setGeneratedKey('');
         }
-    }, [ selection ]);
+    }, [ actionFlag, message, keyword, depth ])
 
     return (
         <Fragment>
@@ -52,14 +101,39 @@ const EncryptingForm = () => {
                         variant="outlined" 
                         sx={{ margin: '.5rem 0', width: 'inherit', maxWidth: '30rem' }} 
                     />
-                    { selection == 2 && (
-                        <TextField id="outlined-basic" value={keyForm} 
+                    { actionFlag == 2 && (
+                        <TextField id="outlined-basic" value={keyword} 
                         onChange={(event) => {
-                            setKeyForm(event.target.value);
+                            setKeyword(event.target.value);
                         }} 
                         label="Type a key" variant="outlined" sx={{ margin: '.5rem 0', width: 'inherit', maxWidth: '30rem' }} />
                     )
                     }
+                    { actionFlag == 1 && (
+                        <Fragment>
+                            <TextField
+                                id="outlined-number"
+                                label="Depth"
+                                type="number"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                value={depth}
+                                onChange={(event) => {
+                                    const value = Number(event.target.value)
+                                    console.log(value);
+                                    value > 0 && setDepth(value);
+                                }}
+                                sx={{ 
+                                    width: 'inherit',
+                                    maxWidth: '15rem',
+                                    marginLeft: 'auto',
+                                    marginTop: '.5rem',
+                                    marginBottom: '.5rem'
+                                }}
+                            />
+                        </Fragment>
+                    )}
                     <FormControl
                         sx={{ 
                             width: 'inherit',
@@ -73,7 +147,7 @@ const EncryptingForm = () => {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={selection + ''}
+                            value={actionFlag + ''}
                             label="Cipher Technique"
                             onChange={handleChange}
                         >
@@ -88,25 +162,25 @@ const EncryptingForm = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                    <Button variant="contained" 
+                    <LoadingButton variant="contained"
+                        loading={callingApiFlag}
                         onClick={ () => {
-                            setActionFlag(selection);
-                            setRequest(message);
-                            setKey(keyForm);
-                            console.log(actionFlag);
-                            console.log(request);
-                            console.log(key);
+                            setActionFlag(actionFlag);
+                            if(actionFlag == 0) {
+                                alert('Select a cypher technique');
+                            } else {
+                                setCallingApiFlag(true);
+                            }
+                            console.log('Action: ' + actionFlag);
+                            console.log('Message: ' + message);
+                            console.log('Keyword: ' + keyword);
+                            console.log('Depth: ' + depth);
                         }}
                         sx={{ width: '8rem', margin: '.5rem', }}>
                             Encrypt
-                    </Button>
+                    </LoadingButton>
                     <Button variant="outlined" 
-                        onClick={ () => {
-                            setKeyForm('');
-                            setMessage('');
-                            setSelection(0);
-                            setResult
-                        }}
+                        onClick={clearFields}
                         sx={{ width: '8rem', margin: '.5rem', }}>
                             Clear
                     </Button>

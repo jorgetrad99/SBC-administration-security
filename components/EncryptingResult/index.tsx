@@ -5,45 +5,35 @@ import { ActionsContext } from '../../context/ActionsContext';
 const EncryptingResult = () => {
     const { 
         actionFlag, setActionFlag,
-        result, setResult,
-        key, setKey,
-        request, setRequest,
-        depth, setDepth
+        generatedKey, setGeneratedKey,
+        keyword, setKeyword,
+        message, setMessage,
+        depth, setDepth,
+        encryptedMessage, setEncryptedMessage,
+        decryptedMessage, setDecryptedMessage,
     } = useContext(ActionsContext);
-
-    useEffect(() => {
-        /* if(actionFlag > 0) {
-            if(actionFlag == 1) {
-
-                setResult()
-            }
-            if(actionFlag == 2) {
-
-            }
-        } */
-    }, [ actionFlag ]);
 
     return (
         <Fragment>
-
-            { actionFlag == 1 && result && (
+            { actionFlag == 1 && encryptedMessage && decryptedMessage && (
                 <Fragment>
                     <Typography variant='h5' align='center'>Rail Fence Cypher Technique</Typography>
                     <Typography variant='h6' align='center'>Depth: { depth }</Typography>
                 </Fragment>
             )}
-            { actionFlag == 2 && result &&  (
+            { actionFlag == 2 && encryptedMessage && decryptedMessage &&  (
                 <Fragment>
                     <Typography variant='h5' align='center'>Vigenere Cypher Technique</Typography>
-                    <Typography variant='h6' align='center'>Key: { key }</Typography>
+                    <Typography variant='h6' align='center'>Keyword: { keyword }</Typography>
+                    <Typography variant='h6' align='center'>Generated Key: { generatedKey }</Typography>
                 </Fragment>
             )}
-            { actionFlag > 0 && result && (
+            { actionFlag > 0 && encryptedMessage && decryptedMessage && (
                 <div style={{ marginTop: '2rem' }}>
                     <Typography variant='h5' align='center'>This is the result</Typography>
-                    <Typography variant='h6' align='center'>Message: { request }</Typography>
-                    <Typography variant='h6' align='center'>Encrypted Message: { result }</Typography>
-                    <Typography variant='h6' align='center'>Decrypted Message: { request }</Typography>
+                    <Typography variant='h6' align='center'>Message: { message }</Typography>
+                    <Typography variant='h6' align='center'>Encrypted Message: { encryptedMessage }</Typography>
+                    <Typography variant='h6' align='center'>Decrypted Message: { decryptedMessage }</Typography>
                 </div>
                 
             )}
