@@ -122,16 +122,29 @@ const EncryptingForm = () => {
                             <TextField
                                 id="outlined-number"
                                 label="Depth"
+                                required                                
                                 type="number"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                                
                                 inputProps={{ inputMode: 'numeric', pattern: '[1-9]*' }}
                                 
                                 onChange={(event) => {
-                                    const value = Number(event.target.value)
-                                    console.log(value);
-                                    value > 0 && setDepth(value);
+                                    
+                                    if(event.target.value.length == 0){
+                                        console.log(event.target.value);
+                                    } else {
+                                        let value = Number(event.target.value)
+
+                                        console.log(value);
+                                        value > 0 && (
+                                            setDepth(value)
+                                        )
+                                        value <= 0 && (
+                                            alert("Only numbers greater than 0 allowed"),
+                                            event.target.value = '1',
+                                            setDepth(value)
+                                        )
+                                    }
+                                    
                                 }}
                                 sx={{ 
                                     width: 'inherit',
@@ -178,8 +191,25 @@ const EncryptingForm = () => {
                             if(actionFlag == 0) {
                                 alert('Select a cypher technique');
                             } else {
-                                setCallingApiFlag(true);
+                                if(actionFlag == 1){
+                                    if(message && depth) {
+                                        setCallingApiFlag(true);
+                                    } else {
+                                        alert("Fill all fields");
+                                    }
+                                } 
+                                if(actionFlag == 2){
+                                    if(message && keyword) {
+                                        setCallingApiFlag(true);
+                                    } else {
+                                        alert("Fill all fields");
+                                    }
+                                } 
+
+                                
+                                
                             }
+
                             console.log('Action: ' + actionFlag);
                             console.log('Message: ' + message);
                             console.log('Keyword: ' + keyword);
