@@ -55,6 +55,10 @@ const EncryptingForm = () => {
                         setDecryptedMessage(data.decryptedMessage);
                         setCallingApiFlag(false)
                     })
+                    .catch((err) => {
+                        alert("There was an error calling the API: " + err)
+                        setCallingApiFlag(false)
+                    }) 
             }
             if(actionFlag == 2){
                 callApi(`${api_vigenere}/${message}&${keyword}`)
@@ -65,6 +69,10 @@ const EncryptingForm = () => {
                         setGeneratedKey(data.generatedKey);
                         setCallingApiFlag(false)
                     })
+                    .catch((err) => {
+                        alert("There was an error calling the API: " + err)
+                        setCallingApiFlag(false)
+                    }) 
             }
         } 
     }, [ callingApiFlag ]);
@@ -118,7 +126,8 @@ const EncryptingForm = () => {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                value={depth}
+                                inputProps={{ inputMode: 'numeric', pattern: '[1-9]*' }}
+                                
                                 onChange={(event) => {
                                     const value = Number(event.target.value)
                                     console.log(value);

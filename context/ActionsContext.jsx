@@ -10,7 +10,7 @@ export const ActionsProvider = ({ children }) => {
   const [ generatedKey, setGeneratedKey ] = useState("");
   const [ encryptedMessage, setEncryptedMessage ] = useState("");
   const [ decryptedMessage, setDecryptedMessage ] = useState("");
-  const [ depth, setDepth ] = useState(0);
+  const [ depth, setDepth ] = useState(1);
 
   return (
     <ActionsContext.Provider

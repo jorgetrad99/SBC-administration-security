@@ -7,9 +7,9 @@ const callApi = (apiUrl) =>
         throw new Error('Something went wrong when calling API');
       }
     })
-    .then((data) => data)
-    .catch((error) => {
+    .then((data) => data);
+/* .catch((error) => {
       alert(`There was an error: ${error}`);
-    });
+    }); */
 
 export { callApi };
